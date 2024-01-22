@@ -1,0 +1,13 @@
+package br.inse.exceltodatabase;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class InseEscolasApiApplicationTests {
+
+    @Test
+    void contextLoads() {
+    }
+
+}
