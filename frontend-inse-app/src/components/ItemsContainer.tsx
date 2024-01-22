@@ -1,9 +1,20 @@
+import React, { useState } from "react";
 import { useItems } from "core/hooks";
 import { BarLoader } from "react-spinners";
+import Details from "./Details";
 
 export default function ItemsContainer() {
   const getSchools = useItems();
   const schools = getSchools.data?.schools ?? [];
+  const [details, setDetails] = useState(null);
+
+  const showDetails = (school: any) => {
+    setDetails(school);
+  };
+
+  const closeDetails = () => {
+    setDetails(null);
+  };
 
   if (getSchools.isLoading) {
     return (
@@ -13,36 +24,9 @@ export default function ItemsContainer() {
     );
   }
 
-  // return (
-  //   <div className="w-75">
-  //     <div className="flex flex-wrap pt2">
-  //       {schools.map((school) => {
-  //         return (
-  //           <div key={school.name} className="w-100 w-50-l ph3">
-  //             <a className="link black hover-dark-blue" href="/t">
-  //               <div className="flex flex-column h-200">
-  //                 <img
-  //                   style={{ objectFit: "cover", height: "420px" }}
-  //                   alt=""
-  //                   loading="lazy"
-  //                   className="img flex-auto bg-gray"
-  //                   src={school.src}
-  //                 />
-
-  //                 <div className="pt3 pb5 flex flex-column">
-  //                   <b className="mb1">{school.name}</b>
-
-  //                   <p className="ma0 b">Média: {school.media / 100}</p>
-  //                   <p className="ma0 b ">Classificação: {school.classification.join(", ")}</p>
-  //                 </div>
-  //               </div>
-  //             </a>
-  //           </div>
-  //         );
-  //       })}
-  //     </div>
-  //   </div>
-  // );
+  if (details) {
+    return <Details school={details} onClose={closeDetails} />;
+  }
 
   return (
     <div className="w-75">
@@ -60,15 +44,25 @@ export default function ItemsContainer() {
         </thead>
         <tbody>
           {schools.map((school, index) => (
-            <tr key={school.name} className={index % 2 === 0 ? "bg-light-gray" : "bg-light-white"}>
+            <tr
+              key={school.name}
+              className={index % 2 === 0 ? "bg-light-gray" : "bg-light-white"}
+            >
               <td className="pa3 bb b--black-10">{school.uf}</td>
               <td className="pa3 bb b--black-10">{school.municipio}</td>
               <td className="pa3 bb b--black-10">{school.name}</td>
-              <td className="pa3 bb b--black-10">{(school.media / 100).toFixed(2)}</td>
-              <td className="pa3 bb b--black-10">{school.classification.join(", ")}</td>
+              <td className="pa3 bb b--black-10">
+                {(school.media / 100).toFixed(2)}
+              </td>
+              <td className="pa3 bb b--black-10">
+                {school.classification.join(", ")}
+              </td>
               <td className="pa3 bb b--black-10">{school.quantidadeAlunos}</td>
               <td className="pa3 bb b--black-10">
-                <button className="bg-green white ph3 pv2 br2 bn pointer">
+                <button
+                  className="bg-green white ph3 pv2 br2 bn pointer"
+                  onClick={() => showDetails(school)}
+                >
                   Ver Detalhes
                 </button>
               </td>
